@@ -1,4 +1,4 @@
-from views import index_view, contact_view
+from views import index_view, contact_view, feed_back_email
 
 
 routes = {

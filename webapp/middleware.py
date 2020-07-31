@@ -1,2 +1,3 @@
-def secret_middleware(request):
-    request['token'] = 'secret_key'
+def slash_endswith(request):
+    if not request['PATH_INFO'].endswith('/'):
+        request['PATH_INFO'] += '/'

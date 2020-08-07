@@ -1,12 +1,7 @@
-from views import ViewRequests
-
-
-views = ViewRequests()
-index_view = views.index_view
-contact_view = views.contact_view
+from views import Contact, Index
 
 
 routes = {
-    '/': index_view,
-    '/contact/': contact_view,
+    '/': Index,
+    '/contact/': Contact,
 }

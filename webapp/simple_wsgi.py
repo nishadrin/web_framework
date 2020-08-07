@@ -1,13 +1,12 @@
 import urllib.parse
+from typing import Dict
 
-from templator import render
-from views import ViewRequests
+from views import NotFound404, Index, Contact
 from routes import routes
-from middleware import slash_endswith
+from middleware import Middleware
 
 
-middlewares = [slash_endswith]
-view_request = ViewRequests()
+middlewares = [Middleware().slash_endswith, ]
 
 
 class Application:
@@ -15,31 +14,30 @@ class Application:
     def __init__(self, routes, middlewares):
         self.routes = routes
         self.middlewares = middlewares
-        self.view = view_request.not_found_404_view
 
     def __call__(self, environ, start_response):
         """
         :param environ: словарь данных от сервера
         :param start_response: функция для ответа серверу
         """
+        self.view = NotFound404
 
         for middleware in self.middlewares:
             middleware(environ)
 
-        if environ.get('PATH_INFO') in self.routes:
-            self.view = self.routes[environ.get('PATH_INFO')]
-
         if environ.get('REQUEST_METHOD') == "POST":
             self.post_request(environ)
 
-        code, body = self.view(environ)
-        body = [body.encode()]
+        if environ.get('PATH_INFO') in self.routes:
+            self.view = self.routes[environ.get('PATH_INFO')]
+
+        code, body = self.view(environ).render()
 
         start_response(code, [('Content-Type', 'text/html')])
 
-        return body
+        return [body.encode()]
 
-    def post_request(self, environ):
+    def post_request(self, environ) -> None:
         data = self.get_wsgi_data(environ)
         data = self.parse_wsgi_data(data)
         environ['parsing_wsgi_data'] = data
@@ -49,7 +47,7 @@ class Application:
             return env['wsgi.input'].read(int(env['CONTENT_LENGTH'])) \
                     if int(env['CONTENT_LENGTH']) > 0 else b''
 
-    def parse_wsgi_data(self, data: bytes) -> dict:
+    def parse_wsgi_data(self, data: bytes) -> Dict:
         result = {}
 
         if data:

@@ -1,4 +1,3 @@
-import os
 from abc import ABC, abstractmethod
 from typing import Tuple, Dict
 
@@ -8,7 +7,6 @@ from common.http_status import StatusCreator
 
 http_status = StatusCreator()
 render = TemplateRender().render
-path = os.getcwd()
 
 
 class DefaultPage(ABC):

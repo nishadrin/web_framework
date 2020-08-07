@@ -1,7 +1,7 @@
-from views import index_view, contact_view, feed_back_email
+from views import Contact, Index
 
 
 routes = {
-    '/': index_view,
-    '/contact/': contact_view,
+    '/': Index,
+    '/contact/': Contact,
 }

@@ -1,25 +1,49 @@
-import os
+from abc import ABC, abstractmethod
+from typing import Tuple, Dict
 
-from templator import render
+from templator import TemplateRender
+from common.http_status import StatusCreator
 
 
-path = os.getcwd()
+http_status = StatusCreator()
+render = TemplateRender().render
 
 
-def not_found_404_view(request):
-    return '404 Not Found', [b' Error 404 page not Found']
+class DefaultPage(ABC):
+    """docstring for DefaultPage."""
 
-def index_view(request):
-    page = render(f'{path}/index.html', course_list=[{'name': 'Python'}, {'name': 'Java'}, {'name': 'PHP'}, {'name': 'JS'}])
+    def __init__(self, request: Dict):
+        self.request = request
 
-    return '200 OK', [page.encode()]
+    @abstractmethod
+    def render(self) -> Tuple[str]:
+        pass
 
-def contact_view(request):
-    page = render(f'{path}/contact.html')
 
-    return '200 OK', [page.encode()]
+class NotFound404(DefaultPage):
+    """docstring for NotFound404."""
 
-def feed_back_email(request):
-    page = render(f'{path}/feed_back.html', data={'email': request['parsing_wsgi_data']['email']})
+    def render(self) -> Tuple[str]:
+        return http_status(404), ' Error 404 page not Found'
 
-    return '200 OK', [page.encode()]
+
+class Index(DefaultPage):
+    """docstring for Index."""
+
+    def render(self) -> Tuple[str]:
+        page = render('index.html', course_list=[{'name': 'Python'}, {'name': 'Java'}, {'name': 'PHP'}, {'name': 'JS'}])
+
+        return http_status(), page
+
+
+class Contact(DefaultPage):
+    """docstring for Contact."""
+
+    def render(self) -> Tuple[str]:
+        page = render('contact.html')
+
+        if self.request['REQUEST_METHOD'] == "POST":
+            print(self.request['parsing_wsgi_data'])
+            page = render('feed_back.html', data={'email': self.request['parsing_wsgi_data']['email']})
+
+        return http_status(), page

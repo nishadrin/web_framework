@@ -1,0 +1,11 @@
+{% include 'base.html' %}
+<body>
+
+  <p> Курсы <p>
+
+  {% for course in course_list %}
+    <p> {{ course }} <p>
+  {% endfor %}
+
+</body>
+</html>

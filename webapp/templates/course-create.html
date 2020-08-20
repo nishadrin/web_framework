@@ -1,0 +1,30 @@
+{% include 'base.html' %}
+<body>
+
+  {% if data %}
+
+    <p> {{ data.created }} <p>
+
+  {% endif %}
+
+  <p> Создание курса <p>
+
+  <form action="" method="post" name="form" enctype='application/x-www-form-urlencoded'>
+    <br>
+    <input size="30" name="type" type="text" placeholder="Тип"/>
+    <br>
+    <input size="30" name="name" type="text" placeholder="Название"/>
+    <br>
+    <input size="30" name="location" type="text" placeholder="Место проведения"/>
+    <br>
+    <input size="30" name="eventtime" type="text" placeholder="Дата: DD.MM.YYYY"/>
+    <br>
+    <input size="30" name="category_name" type="text" placeholder="Имя категории"/>
+    <br>
+    <input size="30" name="category_level" type="text" placeholder="Уровень категории"/>
+    <br>
+    <input type="submit" value="Создать" />
+  </form>
+
+</body>
+</html>

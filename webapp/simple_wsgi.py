@@ -1,7 +1,7 @@
 import urllib.parse
 from typing import Dict
 
-from views import NotFound404, Index, Contact
+from views import NotFound404, Index, Contact, CourseList, CourseCreate, CategoryList, CategoryCreate
 from routes import routes
 from middleware import Middleware
 

@@ -41,10 +41,7 @@ class CategoryList(DefaultPage):
     """docstring for CategoryList."""
 
     def render(self) -> Tuple[str]:
-        categoty_list = []
-        for categoty in site.categories:
-            categoty_list.append(categoty.name)
-        page = render('category-list.html', categoty_list=categoty_list)
+        page = render('category-list.html', categoty_list=site.categories)
 
         return http_status(), page
 
@@ -79,10 +76,7 @@ class CourseList(DefaultPage):
     """docstring for CourseList."""
 
     def render(self) -> Tuple[str]:
-        course_list = []
-        for course in site.courses:
-            course_list.append(course.name)
-        page = render('course-list.html', course_list=course_list)
+        page = render('course-list.html', course_list=site.courses) # course.name for course in course_list
 
         return http_status(), page
 
@@ -98,7 +92,7 @@ class Index(DefaultPage):
     """docstring for Index."""
 
     def render(self) -> Tuple[str]:
-        page = render('index.html', course_list=[{'name': 'Python'}, {'name': 'Java'}, {'name': 'PHP'}, {'name': 'JS'}])
+        page = render('index.html', course_list=site.courses)
 
         return http_status(), page
 
@@ -130,12 +124,7 @@ class CopyCourse(DefaultPage):
                 new_course = old_course.clone()
                 new_course.set_name(new_name)
                 site.courses.append(new_course)
-                # не соблюден DRY, надо бы переписать, но времени не хватает (:
-                # надо обхекты передавать в html
-                course_list = []
-                for course in site.courses:
-                    course_list.append(course.name)
-                page = render('course-list.html', course_list=course_list)
+                page = render('course-list.html', course_list=site.courses)
             else:
                 Exception('There is no course: {name}')
 

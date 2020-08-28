@@ -42,7 +42,7 @@ class Course(CourseMixin, abc.ABC):
 
     @property
     def category(self) -> List[Category]:
-        return self.__categories # или лучше отдавать Category.name из списке? todo
+        return self.__categories
 
     def add_category(self, category: Category):
         self.__categories.append(category)

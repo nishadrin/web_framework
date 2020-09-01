@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from course import Course
+# from education.models.course import Course
 
 class Category:
     """docstring for Category."""
@@ -15,10 +15,10 @@ class Category:
     def set_name(self, name: str):
         self.__name = name
 
-    def add_course(self, course: Course):
+    def add_course(self, course):
         self.__courses.append(course)
 
-    def remove_course(self, course: Course):
+    def remove_course(self, course):
         try:
             self.__courses.remove(course)
         except ValueError as e:
@@ -26,5 +26,5 @@ class Category:
             raise
 
     @property
-    def courses(self) -> List[Optional]:
+    def courses(self):
         return self.__courses

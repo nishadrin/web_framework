@@ -30,7 +30,7 @@ class Fake(DefaultPage):
 
     def render(self) -> Tuple[str]:
         page = 'Hello from fake'
-        
+
         return http_status(), page
 
 
@@ -100,7 +100,7 @@ class CourseList(DefaultPage):
         return http_status(), page
 
 
-@add_route('/not-found-404/')
+
 class NotFound404(DefaultPage):
     """docstring for NotFound404."""
 

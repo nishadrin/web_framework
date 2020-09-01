@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import List, Optional
 import abc
 
-from education.models.category import Category
-from education.models.user import User
+# from education.models.category import Category
+# from education.models.user import User
 
 
 class CourseMixin:
@@ -26,11 +26,11 @@ class Course(CourseMixin, abc.ABC):
         self.__users = list()
 
     @property
-    def categories(self) -> List[Optional]:
+    def categories(self):
         return self.__categories
 
     @property
-    def users(self) -> List[Optional]:
+    def users(self):
         return self.__users
 
     @property
@@ -51,23 +51,23 @@ class Course(CourseMixin, abc.ABC):
         self.__eventtime = eventtime
 
     @property
-    def category(self) -> List[Category]:
+    def category(self):
         return self.__categories
 
-    def add_category(self, category: Category):
+    def add_category(self, category):
         self.__categories.append(category)
 
-    def remove_category(self, category: Category):
+    def remove_category(self, category):
         try:
             self.__categories.remove(category)
         except ValueError as e:
             print(f"We haven't {category.name} in {self.__name} course.")
             raise
 
-    def add_user(self, user: User):
+    def add_user(self, user):
         self.__users.append(user)
 
-    def remove_user(self, user: User):
+    def remove_user(self, user):
         try:
             self.__users.remove(user)
         except ValueError as e:
@@ -114,7 +114,7 @@ class CourseFactory:
     }
 
     @classmethod
-    def create(cls, type: str, name: str, categories: List[Category], eventtime: datetime, location:str):
+    def create(cls, type: str, name: str, categories, eventtime: datetime, location:str):
         course = cls.types[type]()
 
         course.set_name(name)

@@ -5,6 +5,8 @@ from datetime import datetime
 from templator import TemplateRender
 from common.http_status import StatusCreator
 from education.models.main import Site
+from routes import add_route
+from debug import debug
 
 
 http_status = StatusCreator()
@@ -23,9 +25,11 @@ class DefaultPage(ABC):
         pass
 
 
+@add_route('/category-create/')
 class CategoryCreate(DefaultPage):
     """docstring for CategoryCreate."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('category-create.html')
 
@@ -37,18 +41,22 @@ class CategoryCreate(DefaultPage):
         return http_status(), page
 
 
+@add_route('/category-list/')
 class CategoryList(DefaultPage):
     """docstring for CategoryList."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('category-list.html', categoty_list=site.categories)
 
         return http_status(), page
 
 
+@add_route('/course-create/')
 class CourseCreate(DefaultPage):
     """docstring for CourseCreate."""
     # type: str, name: str, categories: List[Category], eventtime: datetime, location: str
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('course-create.html')
 
@@ -72,34 +80,42 @@ class CourseCreate(DefaultPage):
         return http_status(), page
 
 
+@add_route('/course-list/')
 class CourseList(DefaultPage):
     """docstring for CourseList."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('course-list.html', course_list=site.courses) # course.name for course in course_list
 
         return http_status(), page
 
 
+@add_route('/not-found-404/')
 class NotFound404(DefaultPage):
     """docstring for NotFound404."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         return http_status(404), ' Error 404 page not Found'
 
 
+@add_route('/')
 class Index(DefaultPage):
     """docstring for Index."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('index.html', course_list=site.courses)
 
         return http_status(), page
 
 
+@add_route('/contact/')
 class Contact(DefaultPage):
     """docstring for Contact."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('contact.html')
 
@@ -110,9 +126,11 @@ class Contact(DefaultPage):
         return http_status(), page
 
 
+@add_route('/copy-course/')
 class CopyCourse(DefaultPage):
     """docstring for CopyCourse."""
 
+    @debug()
     def render(self) -> Tuple[str]:
         page = render('copy-course.html')
 

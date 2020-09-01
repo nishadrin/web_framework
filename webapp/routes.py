@@ -1,12 +1,11 @@
-from views import Contact, Index, CourseCreate, CourseList, CategoryCreate, CategoryList, CopyCourse
+import abc
 
 
-routes = {
-    '/': Index,
-    '/contact/': Contact,
-    '/course-create/': CourseCreate,
-    '/course-list/': CourseList,
-    '/category-create/': CategoryCreate,
-    '/category-list/': CategoryList,
-    '/copy-course/': CopyCourse,
-}
+ROUTES = dict()
+
+def add_route(path: str) -> None:
+    def decorator(cls):
+        ROUTES[path] = cls
+
+        return cls
+    return decorator

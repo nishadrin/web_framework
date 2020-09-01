@@ -1,8 +1,8 @@
 import urllib.parse
 from typing import Dict
 
-from views import NotFound404, Index, Contact, CourseList, CourseCreate, CategoryList, CategoryCreate
-from routes import routes
+from views import NotFound404
+from routes import ROUTES
 from middleware import Middleware
 
 
@@ -60,4 +60,4 @@ class Application:
         return result
 
 
-application = Application(routes, middlewares)
+application = Application(ROUTES, middlewares)

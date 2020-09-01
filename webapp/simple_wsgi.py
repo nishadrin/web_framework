@@ -13,9 +13,9 @@ middlewares = [Middleware().slash_endswith, ]
 class AbstractApplication(metaclass=ABCMeta):
     """docstring for AbstractApplication."""
 
-    @abstractmethod
     def __init__(self, routes, middlewares):
-        pass
+        self.routes = routes
+        self.middlewares = middlewares
 
     @abstractmethod
     def __call__(self, environ, start_response):
@@ -23,10 +23,6 @@ class AbstractApplication(metaclass=ABCMeta):
 
 
 class Application(AbstractApplication):
-
-    def __init__(self, routes, middlewares):
-        self.routes = routes
-        self.middlewares = middlewares
 
     def __call__(self, environ, start_response):
         """

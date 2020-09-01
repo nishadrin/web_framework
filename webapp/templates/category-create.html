@@ -1,0 +1,20 @@
+{% include 'base.html' %}
+<body>
+
+  {% if data %}
+
+    <p> {{ data.created }} <p>
+
+  {% endif %}
+
+  <p> Создание категории <p>
+
+  <form action="" method="post" name="form" enctype='application/x-www-form-urlencoded'>
+    <br>
+    <input size="30" name="name" type="text" placeholder="Название"/>
+    <br>
+    <input type="submit" value="Создать" />
+  </form>
+
+</body>
+</html>

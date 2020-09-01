@@ -1,58 +1,69 @@
 import urllib.parse
+from typing import Dict
+from abc import ABCMeta, abstractmethod, ABC
 
-from templator import render
-from views import not_found_404_view, index_view, contact_view, feed_back_email
-from routes import routes
-from middleware import slash_endswith
-
-
-middlewares = [slash_endswith]
+from views import NotFound404, Fake
+from routes import ROUTES
+from middleware import Middleware
 
 
-class Application:
+middlewares = [Middleware().slash_endswith, ]
+
+
+class AbstractApplication(metaclass=ABCMeta):
+    """docstring for AbstractApplication."""
+
+    @abstractmethod
+    def __init__(self, routes, middlewares):
+        pass
+
+    @abstractmethod
+    def __call__(self, environ, start_response):
+        pass
+
+
+class Application(AbstractApplication):
 
     def __init__(self, routes, middlewares):
         self.routes = routes
         self.middlewares = middlewares
-        self.view = not_found_404_view
 
     def __call__(self, environ, start_response):
         """
         :param environ: словарь данных от сервера
         :param start_response: функция для ответа серверу
         """
+        code, body = self.page_creator(environ)
+
+        start_response(code, [('Content-Type', 'text/html')])
+
+        return [body.encode()]
+
+    def page_creator(self, environ):
+        self.view = NotFound404
 
         for middleware in self.middlewares:
             middleware(environ)
 
-        if environ.get('PATH_INFO') in self.routes:
-            self.view = self.routes[environ.get('PATH_INFO')]
-
         if environ.get('REQUEST_METHOD') == "POST":
             self.post_request(environ)
 
-        code, body = self.view(environ)
+        if environ.get('PATH_INFO') in self.routes:
+            self.view = self.routes[environ.get('PATH_INFO')]
 
-        start_response(code, [('Content-Type', 'text/html')])
+        return self.view(environ).render()
 
-        return body
-
-    def post_request(self, environ):
+    def post_request(self, environ) -> None:
         data = self.get_wsgi_data(environ)
         data = self.parse_wsgi_data(data)
         environ['parsing_wsgi_data'] = data
-        print(data)
-
-        if data:
-            self.view = feed_back_email
-
 
     def get_wsgi_data(self, env) -> bytes:
         if env.get('CONTENT_LENGTH'):
             return env['wsgi.input'].read(int(env['CONTENT_LENGTH'])) \
                     if int(env['CONTENT_LENGTH']) > 0 else b''
 
-    def parse_wsgi_data(self, data: bytes) -> dict:
+    def parse_wsgi_data(self, data: bytes) -> Dict:
         result = {}
 
         if data:
@@ -65,4 +76,36 @@ class Application:
         return result
 
 
-application = Application(routes, middlewares)
+class FakeApplication(AbstractApplication):
+    """docstring for FakeApplication."""
+
+    def __init__(self, routes, middlewares):
+        self.application = Application(routes, middlewares)
+        super().__init__(routes, middlewares)
+
+    def __call__(self, environ, start_response):
+        code, body = self.page_creator(environ)
+
+        start_response(code, [('Content-Type', 'text/html')])
+
+        return [body.encode()]
+
+    def page_creator(self, environ):
+        return Fake(environ).render()
+
+
+class LogApplication(AbstractApplication):
+    """docstring for LogApplication."""
+
+    def __init__(self, routes, middlewares):
+        self.application = Application(routes, middlewares)
+        super().__init__(routes, middlewares)
+
+    def __call__(self, environ, start_response):
+        print('Debug mode')
+        print(environ)
+        return self.application(environ, start_response)
+
+
+
+application = Application(ROUTES, middlewares)

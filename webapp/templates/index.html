@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Главная</title>
-</head>
+{% include 'base.html' %}
 <body>
     <h1>У нас есть курсы по темам:</h1>
     <ul>
         {% for course in course_list %}
-        <li>{{course.name}}</li>
+          <li> {{ course.name }} <li>
         {% endfor %}
     </ul>
 </body>

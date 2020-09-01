@@ -1,7 +1,11 @@
-from views import index_view, contact_view, feed_back_email
+import abc
 
 
-routes = {
-    '/': index_view,
-    '/contact/': contact_view,
-}
+ROUTES = dict()
+
+def add_route(path: str) -> None:
+    def decorator(cls):
+        ROUTES[path] = cls
+
+        return cls
+    return decorator

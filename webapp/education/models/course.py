@@ -4,6 +4,7 @@ from typing import List, Optional
 import abc
 
 from education.models.category import Category
+from education.models.user import User
 
 
 class CourseMixin:
@@ -18,10 +19,19 @@ class CourseMixin:
 
 class Course(CourseMixin, abc.ABC):
     """docstring for Course."""
-    __slots__ = ('__name', '__eventtime', '__categories', '__location', )
+    __slots__ = ('__name', '__eventtime', '__categories', '__location', '__users')
 
     def __init__(self):
         self.__categories = list()
+        self.__users = list()
+
+    @property
+    def categories(self) -> List[Optional]:
+        return self.__categories
+
+    @property
+    def users(self) -> List[Optional]:
+        return self.__users
 
     @property
     def name(self) -> str:
@@ -52,6 +62,16 @@ class Course(CourseMixin, abc.ABC):
             self.__categories.remove(category)
         except ValueError as e:
             print(f"We haven't {category.name} in {self.__name} course.")
+            raise
+
+    def add_user(self, user: User):
+        self.__users.append(user)
+
+    def remove_user(self, user: User):
+        try:
+            self.__users.remove(user)
+        except ValueError as e:
+            print(f"We haven't {user.name} in {self.__name} course.")
             raise
 
     @property

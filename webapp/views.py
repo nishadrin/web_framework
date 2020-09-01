@@ -25,6 +25,15 @@ class DefaultPage(ABC):
         pass
 
 
+class Fake(DefaultPage):
+    """docstring for Fake."""
+
+    def render(self) -> Tuple[str]:
+        page = 'Hello from fake'
+        
+        return http_status(), page
+
+
 @add_route('/category-create/')
 class CategoryCreate(DefaultPage):
     """docstring for CategoryCreate."""

@@ -1,0 +1,32 @@
+{% include 'base.html' %}
+<body>
+
+  {% if data %}
+
+    <p> {{ data.created }} <p>
+
+  {% endif %}
+
+  <p> Создание пользователя <p>
+
+  <form action="" method="post" name="form" enctype='application/x-www-form-urlencoded'>
+    <br>
+    <input size="30" name="type" type="text" placeholder="Тип"/>
+    <br>
+    <input size="30" name="email" type="text" placeholder="E-mail"/>
+    <br>
+    <input size="30" name="password" type="text" placeholder="Пароль"/>
+    <br>
+    <input size="30" name="name" type="text" placeholder="Имя"/>
+    <br>
+    <input size="30" name="surname" type="text" placeholder="Фамилия"/>
+    <br>
+    <input size="30" name="middlename" type="text" placeholder="Отчество"/>
+    <br>
+    <input size="30" name="telephone" type="text" placeholder="Телефон"/>
+    <br>
+    <input type="submit" value="Создать" />
+  </form>
+
+</body>
+</html>

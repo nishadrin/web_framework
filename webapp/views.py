@@ -25,6 +25,39 @@ class DefaultPage(ABC):
         pass
 
 
+@add_route('/user-create/')
+class UserCreate(DefaultPage):
+    """docstring for UserCreate."""
+
+    def render(self) -> Tuple[str]:
+        page = render('user-create.html')
+
+        if self.request['REQUEST_METHOD'] == "POST":
+            type = self.request['parsing_wsgi_data']['type']
+            email = self.request['parsing_wsgi_data']['email']
+            password = self.request['parsing_wsgi_data']['password']
+            name = self.request['parsing_wsgi_data']['name']
+            surname = self.request['parsing_wsgi_data']['surname']
+            middlename = self.request['parsing_wsgi_data']['middlename']
+            telephone = self.request['parsing_wsgi_data']['telephone']
+
+            user = site.create_or_get_user(type, email, password, name, surname, middlename, telephone)
+
+            page = render('user-create.html', data={'created': f'Создан user {user.email}'})
+
+        return http_status(), page
+
+
+@add_route('/user-list/')
+class UserList(DefaultPage):
+    """docstring for UserList."""
+
+    def render(self) -> Tuple[str]:
+        page = render('user-list.html', user_list=site.users)
+
+        return http_status(), page
+
+
 class Fake(DefaultPage):
     """docstring for Fake."""
 
@@ -78,9 +111,7 @@ class CourseCreate(DefaultPage):
             category_level = self.request['parsing_wsgi_data']['category_level']
 
             eventtime = datetime.strptime(eventtime, "%d.%m.%Y")
-            category_name = site.get_category(category_name)
-            category_level = site.get_category(category_level)
-            categories = [category_name, category_level]
+            categories = [site.get_category(category_name), site.get_category(category_level)]
 
             course = site.create_course(type, name, categories, eventtime, location)
 

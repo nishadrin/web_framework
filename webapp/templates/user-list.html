@@ -1,0 +1,11 @@
+{% include 'base.html' %}
+<body>
+
+  <p> Курсы <p>
+
+  {% for user in user_list %}
+    <p> {{ user.name }} <p>
+  {% endfor %}
+
+</body>
+</html>

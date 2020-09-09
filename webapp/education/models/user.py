@@ -11,7 +11,7 @@ class User(abc.ABC):
         self.__courses = list()
 
     @property
-    def courses(self) -> List[Optional]:
+    def courses(self):
         return self.__courses
 
     @property
@@ -60,10 +60,10 @@ class User(abc.ABC):
     def type_(self):
         pass
 
-    def add_course(self, course: Course):
+    def add_course(self, course):
         self.__courses.append(course)
 
-    def remove_course(self, course: Course):
+    def remove_course(self, course):
         try:
             self.__courses.remove(course)
         except ValueError as e:
@@ -97,8 +97,7 @@ class UserFactory:
 
     @classmethod
     def create(cls, type: str, email: str, password: str, name: str, \
-              surname: str, middlename: str, telephone: str, \
-              courses: List[Course]):
+              surname: str, middlename: str, telephone: str):
         user = cls.types[type]()
 
         user.set_email(email)
@@ -107,8 +106,5 @@ class UserFactory:
         user.set_surname(surname)
         user.set_middlename(middlename)
         user.set_telephone(telephone)
-
-        for course in courses:
-            user.add_course(course)
 
         return user
